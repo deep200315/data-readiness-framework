@@ -6,6 +6,58 @@ A 7-pillar scoring framework that assesses whether supply chain data is ready fo
 
 ---
 
+## Architecture
+
+```
+┌─────────────────────────────────────────────┐
+│               DATA SOURCES                  │
+│           (CSV / Excel Upload)              │
+└─────────────────────┬───────────────────────┘
+                      │
+                      ▼
+┌─────────────────────────────────────────────┐
+│        INGESTION & PARSING LAYER            │
+│   Pandas — load, parse, detect schema       │
+└─────────────────────┬───────────────────────┘
+                      │
+                      ▼
+┌─────────────────────────────────────────────┐
+│             PROFILING LAYER                 │
+│  pandas built-in stats — row/column counts, │
+│  missing maps, correlations, distributions  │
+└─────────────────────┬───────────────────────┘
+                      │
+                      ▼
+┌─────────────────────────────────────────────┐
+│        VALIDATION & SCORING LAYER           │
+│                                             │
+│  Pillar 1: Completeness  → null analysis    │
+│  Pillar 2: Validity      → range & type     │
+│  Pillar 3: Uniqueness    → duplicate check  │
+│  Pillar 4: Consistency   → cross-column     │
+│  Pillar 5: Timeliness    → date ordering    │
+│  Pillar 6: Accuracy      → Isolation Forest │
+│  Pillar 7: AI-Readiness  → leakage, balance │
+└─────────────────────┬───────────────────────┘
+                      │
+                      ▼
+┌─────────────────────────────────────────────┐
+│             SCORING ENGINE                  │
+│  Custom Python — weighted sum → 0–100       │
+│  Per-pillar scores + band + recommendations │
+└─────────────────────┬───────────────────────┘
+                      │
+                      ▼
+┌─────────────────────────────────────────────┐
+│       REPORTING & DASHBOARD LAYER           │
+│  Streamlit UI (interactive dashboard)       │
+│  Plotly charts (radar, bar, heatmap, gauge) │
+│  ReportLab (PDF report export)              │
+└─────────────────────────────────────────────┘
+```
+
+---
+
 ## What It Does
 
 Upload any CSV or Excel dataset and get an instant **Data Readiness Score (0–100)** across 7 quality dimensions, a visual dashboard, and a downloadable PDF report.
