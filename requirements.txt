@@ -6,9 +6,6 @@ numpy>=1.24
 openpyxl>=3.1
 PyYAML>=6.0
 
-# Profiling (requires Python <3.14 — pinned via .python-version)
-ydata-profiling>=4.6
-
 # ML / Anomaly detection
 scikit-learn>=1.4
 
