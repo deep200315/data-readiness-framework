@@ -2,7 +2,7 @@
 
 A 7-pillar scoring framework that assesses whether supply chain data is ready for AI/ML model training — and tells you exactly what to fix.
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://deep200315-data-readiness-framework-app-xxxxxx.streamlit.app)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://data-readiness-framework.streamlit.app/)
 
 ---
 
