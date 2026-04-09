@@ -2,7 +2,7 @@
 
 A 7-pillar scoring framework that assesses whether supply chain data is ready for AI/ML model training — and tells you exactly what to fix.
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://your-app.streamlit.app)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://deep200315-data-readiness-framework-app-xxxxxx.streamlit.app)
 
 ---
 
@@ -12,13 +12,13 @@ Upload any CSV or Excel dataset and get an instant **Data Readiness Score (0–1
 
 | Pillar | Weight | What It Checks |
 |--------|--------|---------------|
-| Completeness | 20% | Missing / null values |
-| Validity | 15% | Schema, data types, value ranges |
-| Uniqueness | 10% | Duplicate rows, key integrity |
+| Completeness | 20% | Missing / null values per column and row |
+| Validity | 15% | Schema conformance, data types, value ranges |
+| Uniqueness | 10% | Duplicate rows and key integrity |
 | Consistency | 15% | Cross-field logic, date ordering |
-| Timeliness | 10% | Temporal gaps, date recency |
+| Timeliness | 10% | Temporal gaps, date recency, future-dated records |
 | Accuracy | 15% | Statistical outliers (Z-score + Isolation Forest) |
-| AI Readiness | 15% | Feature leakage, class balance, correlation |
+| AI Readiness | 15% | Feature leakage, class balance, multicollinearity |
 
 **Quality Bands**
 
@@ -35,7 +35,7 @@ Upload any CSV or Excel dataset and get an instant **Data Readiness Score (0–1
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/YOUR_USERNAME/data-readiness-framework.git
+git clone https://github.com/deep200315/data-readiness-framework.git
 cd data-readiness-framework
 
 # 2. Install dependencies
@@ -74,12 +74,12 @@ data-readiness-framework/
 ├── config/
 │   ├── scoring_weights.yaml       # Pillar weights & band thresholds
 │   └── validation_rules.yaml     # Supply chain domain rules
-├── src/
+├── drf/
 │   ├── ingestion/                 # Data loading & schema detection
-│   ├── profiling/                 # Automated EDA (ydata-profiling)
+│   ├── profiling/                 # EDA stats (pandas built-in; ydata-profiling optional)
 │   ├── validators/                # 7 pillar validators
 │   ├── scoring/                   # Weighted scoring engine + recommendations
-│   └── reporting/                 # Streamlit dashboard, charts, PDF export
+│   └── reporting/                 # Streamlit dashboard, Plotly charts, PDF export
 ├── tests/                         # 23 unit tests (pytest)
 ├── data/
 │   └── generate_test_data.py     # Synthetic test data generator
@@ -90,12 +90,16 @@ data-readiness-framework/
 
 ## Tech Stack
 
-- **Dashboard:** Streamlit + Plotly
-- **Profiling:** ydata-profiling (optional)
-- **Validation:** pandas + Great Expectations (optional)
-- **Anomaly Detection:** scikit-learn (Isolation Forest)
-- **PDF Export:** ReportLab
-- **Standards:** DAMA-DMBOK · ISO 8000 · ISO/IEC 25012
+| Layer | Technology |
+|-------|-----------|
+| Dashboard | Streamlit + Plotly |
+| Data Processing | pandas, NumPy |
+| Anomaly Detection | scikit-learn (Isolation Forest, Z-score) |
+| PDF Export | ReportLab |
+| Profiling | pandas built-in stats (ydata-profiling optional) |
+| Config | YAML |
+| Testing | pytest |
+| Standards | DAMA-DMBOK · ISO 8000 · ISO/IEC 25012 |
 
 ---
 
@@ -106,6 +110,16 @@ pytest tests/ -v
 ```
 
 23 tests covering all 7 pillar validators and the scoring engine.
+
+---
+
+## Dashboard Tabs
+
+1. **Overview** — Overall score gauge, quality band, key dataset stats
+2. **Pillar Details** — Per-pillar bar chart + expandable check results
+3. **Data Profile** — Column-level missing map, correlation heatmap, type breakdown
+4. **Recommendations** — Prioritized remediation actions with severity levels
+5. **Export** — Download full PDF report
 
 ---
 
