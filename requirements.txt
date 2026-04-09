@@ -1,0 +1,31 @@
+# Data Readiness Framework — Python Dependencies
+
+# Core data processing
+pandas>=2.0
+numpy>=1.24
+openpyxl>=3.1          # Excel support
+PyYAML>=6.0            # Config file loading
+
+# Profiling
+ydata-profiling>=4.6   # Automated EDA (optional but recommended)
+
+# Validation
+great-expectations>=0.18  # Rule-based data validation (optional)
+
+# ML / Anomaly detection
+scikit-learn>=1.4      # Isolation Forest, outlier detection
+
+# Dashboard
+streamlit>=1.32        # Interactive web UI
+plotly>=5.20           # Charts (gauge, radar, bar, heatmap)
+
+# PDF generation
+jinja2>=3.1            # HTML templating (used for report_template.html preview)
+reportlab>=4.0         # Pure-Python PDF generation (no system dependencies needed)
+
+# Testing
+pytest>=8.0
+pytest-cov>=4.0
+
+# Optional: drift detection
+# evidently>=0.4

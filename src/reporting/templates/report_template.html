@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Data Readiness Report — {{ dataset_name | default('Dataset') }}</title>
+
+<!-- Jinja2-rendered CSS variables — safe to have template syntax here -->
+<style>
+  :root {
+    --band-color: {{ band_color | default('#3498db') }};
+  }
+</style>
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 11pt;
+    color: #2c3e50;
+    line-height: 1.5;
+  }
+
+  /* Cover page */
+  .cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+    color: white;
+    text-align: center;
+    padding: 60px 40px;
+    page-break-after: always;
+  }
+  .cover h1 { font-size: 32pt; font-weight: 700; margin-bottom: 12px; letter-spacing: 1px; }
+  .cover .subtitle { font-size: 15pt; color: #bdc3c7; margin-bottom: 40px; }
+  .cover .score-box {
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 16px;
+    padding: 30px 60px;
+    margin: 20px 0;
+  }
+  /* Use CSS variable with fallback so raw HTML preview still shows a colour */
+  .cover .score-number { font-size: 64pt; font-weight: 900; color: var(--band-color, #3498db); }
+  .cover .score-label { font-size: 14pt; color: #ecf0f1; margin-top: 4px; }
+  .cover .band-badge {
+    display: inline-block;
+    background: var(--band-color, #3498db);
+    color: white;
+    font-size: 14pt;
+    font-weight: 700;
+    padding: 8px 28px;
+    border-radius: 50px;
+    margin: 16px 0;
+  }
+  .cover .meta { font-size: 10pt; color: #95a5a6; margin-top: 30px; }
+
+  /* General layout */
+  .page { padding: 40px 50px; page-break-before: always; }
+  .page:first-of-type { page-break-before: avoid; }
+
+  h2 {
+    font-size: 16pt;
+    font-weight: 700;
+    color: #1a252f;
+    border-bottom: 3px solid #3498db;
+    padding-bottom: 6px;
+    margin: 24px 0 14px;
+  }
+  h3 { font-size: 12pt; font-weight: 600; color: #2c3e50; margin: 18px 0 8px; }
+
+  /* Summary cards */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .card {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 14px;
+    text-align: center;
+  }
+  .card .card-value { font-size: 20pt; font-weight: 700; color: #2980b9; }
+  .card .card-label { font-size: 9pt; color: #7f8c8d; margin-top: 4px; }
+
+  /* Scorecard table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 10.5pt;
+  }
+  th {
+    background: #2c3e50;
+    color: white;
+    padding: 9px 12px;
+    text-align: left;
+    font-weight: 600;
+  }
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #ecf0f1;
+  }
+  tr:nth-child(even) td { background: #f8f9fa; }
+  tr.total-row td { font-weight: 700; background: #eaf4fb; border-top: 2px solid #2980b9; }
+
+  /* Score badges — each class has its own hardcoded colour (no template vars in CSS) */
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 50px;
+    font-size: 9pt;
+    font-weight: 600;
+    color: white;
+  }
+  .badge-excellent { background: #2ecc71; }
+  .badge-good      { background: #f39c12; }
+  .badge-at-risk   { background: #e67e22; }
+  .badge-not-ready { background: #e74c3c; }
+
+  /* Progress bar */
+  .progress-wrap {
+    background: #ecf0f1;
+    border-radius: 4px;
+    height: 10px;
+    width: 100%;
+    margin-top: 4px;
+  }
+  .progress-fill { height: 10px; border-radius: 4px; }
+
+  /* Issues */
+  .issue-item {
+    background: #fef9e7;
+    border-left: 4px solid #f39c12;
+    padding: 8px 12px;
+    margin: 6px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 10pt;
+  }
+  .issue-item.critical { background: #fde8e8; border-left-color: #e74c3c; }
+
+  /* Recommendations */
+  .rec-item {
+    background: #eaf4fb;
+    border-left: 4px solid #3498db;
+    padding: 10px 14px;
+    margin: 8px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 10pt;
+  }
+  .rec-item.critical { background: #fde8e8; border-left-color: #e74c3c; }
+  .rec-number { font-weight: 700; color: #2980b9; margin-right: 6px; }
+
+  .ok-text { color: #2ecc71; font-size: 10pt; }
+
+  /* Footer */
+  @page {
+    margin: 15mm 15mm 20mm;
+    @bottom-center {
+      content: "Data Readiness Framework  |  Page " counter(page) " of " counter(pages);
+      font-size: 8pt;
+      color: #95a5a6;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     COVER PAGE
+═══════════════════════════════════════════════════════════ -->
+<div class="cover">
+  <h1>AI Data Readiness Report</h1>
+  <div class="subtitle">{{ dataset_name | default('Supply Chain Dataset') }}</div>
+
+  <div class="score-box">
+    <div class="score-number">{{ overall_score | default('—') }}</div>
+    <div class="score-label">out of 100</div>
+  </div>
+
+  <div class="band-badge">{{ band_label | default('Assessment Result') }}</div>
+
+  <div class="meta">
+    Generated: {{ timestamp | default('—') }}<br>
+    Framework: 7-Pillar AI Readiness Assessment (DAMA-DMBOK + ISO 8000)
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 1 — EXECUTIVE SUMMARY
+═══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <h2>1. Executive Summary</h2>
+
+  <div class="summary-grid">
+    <div class="card">
+      <div class="card-value">{{ stats.row_count | default('—') }}</div>
+      <div class="card-label">Total Rows</div>
+    </div>
+    <div class="card">
+      <div class="card-value">{{ stats.column_count | default('—') }}</div>
+      <div class="card-label">Total Columns</div>
+    </div>
+    <div class="card">
+      <div class="card-value">{{ stats.overall_missing_pct | default('—') }}%</div>
+      <div class="card-label">Missing Data</div>
+    </div>
+    <div class="card">
+      <div class="card-value">{{ stats.duplicate_pct | default('—') }}%</div>
+      <div class="card-label">Duplicate Rows</div>
+    </div>
+  </div>
+
+  <p>This report presents the results of an automated AI Data Readiness assessment performed on
+  <strong>{{ dataset_name | default('the uploaded dataset') }}</strong>. The dataset was evaluated
+  across 7 quality dimensions using a weighted scoring model aligned with DAMA-DMBOK and ISO 8000.</p>
+
+  <p>The overall <strong>Data Readiness Score is {{ overall_score | default('—') }}/100</strong>,
+  placing the dataset in the <strong>{{ band_label | default('—') }}</strong> category.</p>
+
+  {% if overall_score is defined %}
+    {% if overall_score | float >= 85 %}
+    <p style="color:#2ecc71;font-weight:600;margin-top:10px;">
+      The data is in excellent condition and suitable for AI/ML model training with minimal preprocessing.
+    </p>
+    {% elif overall_score | float >= 70 %}
+    <p style="color:#f39c12;font-weight:600;margin-top:10px;">
+      The data requires minor fixes before ML training. Address the recommendations in Section 4.
+    </p>
+    {% elif overall_score | float >= 50 %}
+    <p style="color:#e67e22;font-weight:600;margin-top:10px;">
+      Significant data quality issues detected. Remediation is required before using this data for ML.
+    </p>
+    {% else %}
+    <p style="color:#e74c3c;font-weight:600;margin-top:10px;">
+      Critical data quality issues detected. This data is not suitable for AI/ML in its current state.
+    </p>
+    {% endif %}
+  {% endif %}
+
+  <!-- ── Pillar Scorecard ── -->
+  <h2>2. Pillar Scorecard</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Pillar</th>
+        <th>Weight</th>
+        <th>Score / 100</th>
+        <th>Weighted</th>
+        <th>Checks</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for pillar in pillars | default([]) %}
+      <tr>
+        <td><strong>{{ pillar.label }}</strong></td>
+        <td>{{ pillar.weight_pct }}%</td>
+        <td>
+          {{ pillar.score }}
+          <div class="progress-wrap">
+            <div class="progress-fill" style="width:{{ pillar.score }}%;background:{{ pillar.color }};"></div>
+          </div>
+        </td>
+        <td>{{ pillar.weighted_score }}</td>
+        <td>{{ pillar.passed }}/{{ pillar.total }}</td>
+        <td><span class="badge badge-{{ pillar.band_class }}">{{ pillar.band_text }}</span></td>
+      </tr>
+    {% endfor %}
+      <tr class="total-row">
+        <td><strong>OVERALL</strong></td>
+        <td>100%</td>
+        <td><strong>{{ overall_score | default('—') }}</strong></td>
+        <td><strong>{{ overall_score | default('—') }}</strong></td>
+        <td>—</td>
+        <td><span class="badge badge-{{ overall_band_class | default('good') }}">{{ overall_band_text | default('—') }}</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 2 — DETAILED FINDINGS
+═══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <h2>3. Pillar-Level Findings</h2>
+
+  {% for pillar in pillars | default([]) %}
+  <h3>{{ pillar.label }} &mdash; {{ pillar.score }}/100</h3>
+  {% if pillar.issues %}
+    {% for issue in pillar.issues %}
+    <div class="issue-item {% if 'CRITICAL' in issue %}critical{% endif %}">{{ issue }}</div>
+    {% endfor %}
+  {% else %}
+    <p class="ok-text">No issues detected — this pillar passed all checks.</p>
+  {% endif %}
+  {% else %}
+  <p style="color:#7f8c8d;">No pillar data available.</p>
+  {% endfor %}
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 3 — RECOMMENDATIONS
+═══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <h2>4. Recommendations</h2>
+  <p>The following prioritised actions will improve your Data Readiness Score:</p>
+
+  {% for rec in recommendations | default([]) %}
+  <div class="rec-item {% if 'CRITICAL' in rec %}critical{% endif %}">
+    <span class="rec-number">{{ loop.index }}.</span>{{ rec }}
+  </div>
+  {% else %}
+  <p class="ok-text">No critical recommendations. Data is in good shape for ML use.</p>
+  {% endfor %}
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 4 — COLUMN QUALITY + METHODOLOGY
+═══════════════════════════════════════════════════════════ -->
+<div class="page">
+  <h2>5. Column-Level Quality Summary (Top Missing)</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Column</th>
+        <th>Null Count</th>
+        <th>Null %</th>
+        <th>Unique Values</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for col in top_missing_cols | default([]) %}
+      <tr>
+        <td>{{ col.name }}</td>
+        <td>{{ col.null_count }}</td>
+        <td>{{ col.null_pct }}%</td>
+        <td>{{ col.unique_count }}</td>
+        <td>
+          {% if col.null_pct | float >= 50 %}
+            <span class="badge badge-not-ready">Critical</span>
+          {% elif col.null_pct | float >= 20 %}
+            <span class="badge badge-at-risk">Warning</span>
+          {% else %}
+            <span class="badge badge-good">OK</span>
+          {% endif %}
+        </td>
+      </tr>
+    {% else %}
+    <tr><td colspan="5" style="color:#2ecc71;text-align:center;">No missing values detected!</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>6. Assessment Methodology</h2>
+  <p>This assessment uses a <strong>7-pillar weighted scoring model</strong>:</p>
+  <ul style="margin:10px 0 0 20px;line-height:2.2;">
+    <li><strong>Completeness (20%)</strong> — Missing/null value analysis per column and row</li>
+    <li><strong>Validity (15%)</strong> — Schema conformance, data types, value range checks</li>
+    <li><strong>Uniqueness (10%)</strong> — Duplicate row detection and key column integrity</li>
+    <li><strong>Consistency (15%)</strong> — Cross-field logic and referential integrity checks</li>
+    <li><strong>Timeliness (10%)</strong> — Date ordering, temporal gaps, recency validation</li>
+    <li><strong>Accuracy (15%)</strong> — Outlier detection via Z-score + Isolation Forest</li>
+    <li><strong>AI Readiness (15%)</strong> — Feature correlation, class balance, leakage risk</li>
+  </ul>
+  <p style="margin-top:14px;color:#7f8c8d;font-size:10pt;">
+    Standards applied: <strong>DAMA-DMBOK</strong> &bull; <strong>ISO 8000</strong> &bull; <strong>ISO/IEC 25012</strong>
+  </p>
+</div>
+
+</body>
+</html>

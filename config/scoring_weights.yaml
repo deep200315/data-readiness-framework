@@ -1,0 +1,65 @@
+# Data Readiness Framework — Pillar Weights
+# Weights must sum to 1.0
+# Adjust per your domain requirements
+
+pillars:
+  completeness:
+    weight: 0.20
+    description: "Measures missing/null values across columns and rows"
+    thresholds:
+      critical_null_pct: 50.0   # column null% above this is critical
+      warning_null_pct: 20.0    # column null% above this is a warning
+
+  validity:
+    weight: 0.15
+    description: "Schema conformance, data types, value ranges, enumerations"
+
+  uniqueness:
+    weight: 0.10
+    description: "Duplicate row detection and key uniqueness checks"
+    thresholds:
+      max_duplicate_pct: 5.0    # above this fails uniqueness
+
+  consistency:
+    weight: 0.15
+    description: "Cross-field logic, referential integrity, derived field checks"
+
+  timeliness:
+    weight: 0.10
+    description: "Date ordering, recency, temporal gaps"
+    thresholds:
+      max_gap_days: 90          # max allowed gap in date sequence
+
+  accuracy:
+    weight: 0.15
+    description: "Statistical outlier detection using Z-score and Isolation Forest"
+    thresholds:
+      zscore_threshold: 3.0     # |Z| above this = outlier
+      isolation_contamination: 0.05  # expected outlier fraction
+
+  ai_readiness:
+    weight: 0.15
+    description: "ML-specific checks: correlation, class balance, leakage, variance"
+    thresholds:
+      max_correlation: 0.95     # feature pairs above this = multicollinearity
+      min_class_ratio: 0.15     # minority class below this = imbalanced
+      max_skewness: 10.0        # skewness above this = needs transformation
+
+# Quality Band Thresholds
+bands:
+  excellent:
+    min: 85
+    label: "Excellent — Ready for ML"
+    color: "#2ecc71"
+  good:
+    min: 70
+    label: "Good — Minor fixes needed"
+    color: "#f39c12"
+  at_risk:
+    min: 50
+    label: "At Risk — Significant remediation required"
+    color: "#e67e22"
+  not_ready:
+    min: 0
+    label: "Not Ready — Not suitable for AI"
+    color: "#e74c3c"

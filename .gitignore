@@ -1,0 +1,57 @@
+# Claude Code memory and plans
+.claude/
+
+# Pytest cache
+.pytest_cache/
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Python virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Data files — DataCo CSV is too large for git (use Git LFS or download from Kaggle)
+data/*.csv
+data/*.xlsx
+data/*.parquet
+data/*.json
+# Keep the generator script
+!data/generate_test_data.py
+
+# Generated reports
+*.pdf
+test_report.pdf
+
+# ydata-profiling cache
+.profile_cache/
+
+# Streamlit secrets and config
+.streamlit/secrets.toml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Environment variables
+.env
+.env.*
+
+# Build artifacts
+dist/
+build/
+*.egg-info/

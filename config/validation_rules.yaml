@@ -1,0 +1,125 @@
+# Data Readiness Framework — Domain Validation Rules
+# Supply Chain specific rules for the DataCo dataset
+# These are applied in the Validity pillar
+
+dataset:
+  name: "Supply Chain Dataset"
+  expected_min_rows: 1000
+  expected_date_range:
+    start: "2015-01-01"
+    end: "2030-12-31"
+
+# Column-level rules
+columns:
+  # Numeric columns with allowed ranges
+  numeric_ranges:
+    - column: "Order Item Quantity"
+      min: 1
+      max: 10000
+    - column: "Sales"
+      min: 0.0
+      max: 1000000.0
+    - column: "Order Item Discount Rate"
+      min: 0.0
+      max: 1.0
+    - column: "Days for shipping (real)"
+      min: 0
+      max: 365
+    - column: "Days for shipment (scheduled)"
+      min: 0
+      max: 365
+    - column: "Order Item Profit Ratio"
+      min: -1.0
+      max: 1.0
+    - column: "Benefit per order"
+      min: -100000.0
+      max: 100000.0
+
+  # Categorical columns with allowed values (enums)
+  categorical_enums:
+    - column: "Delivery Status"
+      allowed_values:
+        - "Advance shipping"
+        - "Late delivery"
+        - "Shipping canceled"
+        - "Shipping on time"
+    - column: "Shipping Mode"
+      allowed_values:
+        - "First Class"
+        - "Second Class"
+        - "Standard Class"
+        - "Same Day"
+    - column: "Order Status"
+      allowed_values:
+        - "COMPLETE"
+        - "PENDING"
+        - "CLOSED"
+        - "PENDING_PAYMENT"
+        - "CANCELED"
+        - "PROCESSING"
+        - "SUSPECTED_FRAUD"
+        - "ON_HOLD"
+        - "PAYMENT_REVIEW"
+    - column: "Customer Segment"
+      allowed_values:
+        - "Consumer"
+        - "Corporate"
+        - "Home Office"
+    - column: "Late_delivery_risk"
+      allowed_values:
+        - 0
+        - 1
+
+  # Date columns (must be parseable as datetime)
+  datetime_columns:
+    - "order date (DateOrders)"
+    - "shipping date (DateOrders)"
+
+  # ID columns (should not be null)
+  required_id_columns:
+    - "Order Id"
+    - "Customer Id"
+    - "Product Card Id"
+
+  # Columns expected to be mostly null (skip completeness penalty)
+  known_sparse_columns:
+    - "Product Description"
+    - "Order Zipcode"
+
+# Cross-field consistency rules
+consistency_rules:
+  - name: "shipping_after_order"
+    description: "Shipping date must be >= Order date"
+    left_column: "shipping date (DateOrders)"
+    right_column: "order date (DateOrders)"
+    operator: ">="
+
+  - name: "shipping_days_match"
+    description: "Days for shipping (real) should roughly match date diff"
+    tolerance_days: 2
+
+  - name: "late_delivery_risk_vs_status"
+    description: "If Late_delivery_risk=1, Delivery Status should be 'Late delivery'"
+    risk_column: "Late_delivery_risk"
+    status_column: "Delivery Status"
+    risk_value: 1
+    expected_status: "Late delivery"
+
+# AI Readiness — target column config
+ai_readiness:
+  target_column: "Late_delivery_risk"
+  id_columns:
+    - "Order Id"
+    - "Customer Id"
+    - "Product Card Id"
+    - "Order Item Id"
+    - "Order Item Cardprod Id"
+  leakage_risk_columns:
+    - "Delivery Status"      # directly encodes target
+    - "Days for shipping (real)"  # used to compute target in some versions
+  text_columns:
+    - "Product Name"
+    - "Customer City"
+    - "Order City"
+    - "Customer Country"
+    - "Order Country"
