@@ -70,7 +70,7 @@ def run_dashboard() -> None:
             st.caption(f"• {pillar}: {w}")
 
         st.divider()
-        st.caption("Based on DAMA-DMBOK + ISO 8000")
+        st.caption("7-Pillar AI Data Readiness Assessment")
 
     # ── Main Content ─────────────────────────────────────────────────────────
     st.title("📊 AI Data Readiness Framework")

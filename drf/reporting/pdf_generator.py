@@ -161,7 +161,7 @@ def generate_pdf(
         [Paragraph(
             f"<font size='8' color='#95a5a6'>"
             f"Generated: {result.timestamp[:19].replace('T', ' ')}<br/>"
-            f"Framework: 7-Pillar AI Readiness Assessment (DAMA-DMBOK + ISO 8000)"
+            f"Framework: 7-Pillar AI Readiness Assessment"
             f"</font>",
             ParagraphStyle("CoverMeta", alignment=TA_CENTER, leading=14),
         )],
@@ -435,7 +435,7 @@ def generate_pdf(
     ]))
     story.append(m_table)
     story.append(spacer(3))
-    story.append(caption("Standards: DAMA-DMBOK  ·  ISO 8000  ·  ISO/IEC 25012"))
+    story.append(caption("7-Pillar AI Data Readiness Assessment"))
 
     # ── BUILD PDF ──────────────────────────────────────────────────────────
     doc.build(story, onFirstPage=_add_footer, onLaterPages=_add_footer)

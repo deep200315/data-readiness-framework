@@ -187,7 +187,7 @@
 
   <div class="meta">
     Generated: {{ timestamp | default('—') }}<br>
-    Framework: 7-Pillar AI Readiness Assessment (DAMA-DMBOK + ISO 8000)
+    Framework: 7-Pillar AI Readiness Assessment
   </div>
 </div>
 
@@ -218,7 +218,7 @@
 
   <p>This report presents the results of an automated AI Data Readiness assessment performed on
   <strong>{{ dataset_name | default('the uploaded dataset') }}</strong>. The dataset was evaluated
-  across 7 quality dimensions using a weighted scoring model aligned with DAMA-DMBOK and ISO 8000.</p>
+  across 7 quality dimensions using a weighted scoring model.</p>
 
   <p>The overall <strong>Data Readiness Score is {{ overall_score | default('—') }}/100</strong>,
   placing the dataset in the <strong>{{ band_label | default('—') }}</strong> category.</p>
@@ -372,7 +372,7 @@
     <li><strong>AI Readiness (15%)</strong> — Feature correlation, class balance, leakage risk</li>
   </ul>
   <p style="margin-top:14px;color:#7f8c8d;font-size:10pt;">
-    Standards applied: <strong>DAMA-DMBOK</strong> &bull; <strong>ISO 8000</strong> &bull; <strong>ISO/IEC 25012</strong>
+    7-Pillar AI Data Readiness Assessment
   </p>
 </div>
 

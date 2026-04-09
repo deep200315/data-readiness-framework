@@ -99,7 +99,6 @@ data-readiness-framework/
 | Profiling | pandas built-in stats (ydata-profiling optional) |
 | Config | YAML |
 | Testing | pytest |
-| Standards | DAMA-DMBOK · ISO 8000 · ISO/IEC 25012 |
 
 ---
 
