@@ -3,29 +3,23 @@
 # Core data processing
 pandas>=2.0
 numpy>=1.24
-openpyxl>=3.1          # Excel support
-PyYAML>=6.0            # Config file loading
+openpyxl>=3.1
+PyYAML>=6.0
 
-# Profiling
-ydata-profiling>=4.6   # Automated EDA (optional but recommended)
-
-# Validation
-great-expectations>=0.18  # Rule-based data validation (optional)
+# Profiling (requires Python <3.14 — pinned via .python-version)
+ydata-profiling>=4.6
 
 # ML / Anomaly detection
-scikit-learn>=1.4      # Isolation Forest, outlier detection
+scikit-learn>=1.4
 
 # Dashboard
-streamlit>=1.32        # Interactive web UI
-plotly>=5.20           # Charts (gauge, radar, bar, heatmap)
+streamlit>=1.32
+plotly>=5.20
 
 # PDF generation
-jinja2>=3.1            # HTML templating (used for report_template.html preview)
-reportlab>=4.0         # Pure-Python PDF generation (no system dependencies needed)
+jinja2>=3.1
+reportlab>=4.0
 
 # Testing
 pytest>=8.0
 pytest-cov>=4.0
-
-# Optional: drift detection
-# evidently>=0.4
