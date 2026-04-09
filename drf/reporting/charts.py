@@ -10,7 +10,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 
 if TYPE_CHECKING:
-    from src.scoring.engine import ScoreResult
+    from drf.scoring.engine import ScoreResult
 
 PILLAR_LABELS = {
     "completeness": "Completeness",

@@ -2,7 +2,7 @@
 import numpy as np
 import pandas as pd
 import pytest
-from src.validators.ai_readiness import check
+from drf.validators.ai_readiness import check
 
 BASE_CONFIG = {
     "pillars": {

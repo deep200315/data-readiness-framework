@@ -19,11 +19,11 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src.ingestion.loader import get_dataset_summary, load_file
-from src.ingestion.schema_detector import detect_schema
-from src.profiling.profiler import run_profile
-from src.reporting import charts
-from src.scoring import engine
+from drf.ingestion.loader import get_dataset_summary, load_file
+from drf.ingestion.schema_detector import detect_schema
+from drf.profiling.profiler import run_profile
+from drf.reporting import charts
+from drf.scoring import engine
 
 logger = logging.getLogger(__name__)
 
@@ -322,7 +322,7 @@ def _render_export(result, profile_stats: dict, filename: str) -> None:
         if st.button("Generate PDF Report", type="primary"):
             with st.spinner("Generating PDF…"):
                 try:
-                    from src.reporting.pdf_generator import generate_pdf
+                    from drf.reporting.pdf_generator import generate_pdf
                     pdf_bytes = generate_pdf(result, profile_stats, dataset_name=filename)
                     st.download_button(
                         label="Download PDF Report",

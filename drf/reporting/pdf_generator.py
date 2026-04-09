@@ -9,7 +9,7 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from src.scoring.engine import ScoreResult
+    from drf.scoring.engine import ScoreResult
 
 logger = logging.getLogger(__name__)
 

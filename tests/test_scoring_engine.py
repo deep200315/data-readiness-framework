@@ -1,7 +1,7 @@
 """Tests for the Scoring Engine."""
 import pandas as pd
 import pytest
-from src.scoring.engine import ScoreResult, _determine_band
+from drf.scoring.engine import ScoreResult, _determine_band
 
 
 # Minimal configs for testing
@@ -58,7 +58,7 @@ def make_clean_df(n=200):
 
 def test_clean_data_scores_high():
     df = make_clean_df()
-    from src.scoring.engine import run
+    from drf.scoring.engine import run
     result = run(df, SCORING_CONFIG, VALIDATION_CONFIG)
     assert result.overall_score >= 70, f"Expected >=70, got {result.overall_score}"
 
@@ -69,7 +69,7 @@ def test_all_null_data_scores_low():
         "b": [None] * 50,
         "c": [None] * 50,
     })
-    from src.scoring.engine import run
+    from drf.scoring.engine import run
     result = run(df, SCORING_CONFIG, VALIDATION_CONFIG)
     # Completeness=0, uniqueness=0 pull score down; other pillars
     # score 100 when no applicable checks exist → overall lands in At Risk band
@@ -86,7 +86,7 @@ def test_band_determination():
 
 def test_score_result_has_all_pillars():
     df = make_clean_df()
-    from src.scoring.engine import run
+    from drf.scoring.engine import run
     result = run(df, SCORING_CONFIG, VALIDATION_CONFIG)
     expected_pillars = {"completeness", "validity", "uniqueness", "consistency",
                         "timeliness", "accuracy", "ai_readiness"}
@@ -95,7 +95,7 @@ def test_score_result_has_all_pillars():
 
 def test_weighted_sum_correct():
     df = make_clean_df()
-    from src.scoring.engine import run
+    from drf.scoring.engine import run
     result = run(df, SCORING_CONFIG, VALIDATION_CONFIG)
     # Verify weighted sum matches overall score
     manual_sum = sum(pr.score * pr.weight for pr in result.pillars.values())
@@ -104,6 +104,6 @@ def test_weighted_sum_correct():
 
 def test_recommendations_generated():
     df = pd.DataFrame({"a": [None] * 100, "b": [None] * 100})
-    from src.scoring.engine import run
+    from drf.scoring.engine import run
     result = run(df, SCORING_CONFIG, VALIDATION_CONFIG)
     assert len(result.recommendations) > 0

@@ -1,7 +1,7 @@
 """Tests for Pillar 2 — Validity validator."""
 import pandas as pd
 import pytest
-from src.validators.validity import check
+from drf.validators.validity import check
 
 BASE_CONFIG = {
     "columns": {

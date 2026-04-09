@@ -1,7 +1,7 @@
 """Tests for Pillar 1 — Completeness validator."""
 import pandas as pd
 import pytest
-from src.validators.completeness import check
+from drf.validators.completeness import check
 
 BASE_CONFIG = {
     "pillars": {

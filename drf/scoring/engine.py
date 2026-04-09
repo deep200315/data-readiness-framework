@@ -12,7 +12,7 @@ from typing import Any, Optional
 import pandas as pd
 import yaml
 
-from src.validators import (
+from drf.validators import (
     accuracy,
     ai_readiness,
     completeness,
@@ -138,7 +138,7 @@ def run(
     overall_score = round(weighted_sum, 2)
     band, band_label, band_color = _determine_band(overall_score, scoring_config)
 
-    from src.scoring.recommendations import generate
+    from drf.scoring.recommendations import generate
     recommendations = generate(pillar_results, overall_score)
 
     dataset_stats = {

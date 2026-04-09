@@ -9,13 +9,12 @@ import os
 import sys
 from pathlib import Path
 
-# Ensure project root is on sys.path before any src.* imports
+# Ensure project root is on sys.path before any drf.* imports
 ROOT = Path(__file__).resolve().parent
 _root_str = str(ROOT)
 if _root_str not in sys.path:
     sys.path.insert(0, _root_str)
 
-# Also set working directory so relative config paths resolve correctly
 os.chdir(_root_str)
 
 logging.basicConfig(
@@ -24,6 +23,6 @@ logging.basicConfig(
     handlers=[logging.StreamHandler()],
 )
 
-from src.reporting.dashboard import run_dashboard  # noqa: E402
+from drf.reporting.dashboard import run_dashboard  # noqa: E402
 
 run_dashboard()

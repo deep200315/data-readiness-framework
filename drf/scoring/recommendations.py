@@ -7,7 +7,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from src.scoring.engine import PillarResult
+    from drf.scoring.engine import PillarResult
 
 
 # Threshold below which a pillar is considered "needs attention"
