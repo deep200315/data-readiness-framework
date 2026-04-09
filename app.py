@@ -5,13 +5,18 @@ Run with:
     streamlit run app.py
 """
 import logging
+import os
 import sys
 from pathlib import Path
 
-# Ensure project root is importable
+# Ensure project root is on sys.path before any src.* imports
 ROOT = Path(__file__).resolve().parent
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+_root_str = str(ROOT)
+if _root_str not in sys.path:
+    sys.path.insert(0, _root_str)
+
+# Also set working directory so relative config paths resolve correctly
+os.chdir(_root_str)
 
 logging.basicConfig(
     level=logging.INFO,
@@ -19,10 +24,6 @@ logging.basicConfig(
     handlers=[logging.StreamHandler()],
 )
 
-from src.reporting.dashboard import run_dashboard
+from src.reporting.dashboard import run_dashboard  # noqa: E402
 
-if __name__ == "__main__":
-    run_dashboard()
-else:
-    # Called by `streamlit run app.py` (module-level execution)
-    run_dashboard()
+run_dashboard()

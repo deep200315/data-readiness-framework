@@ -172,7 +172,7 @@ def _render_overview(result, profile_stats: dict) -> None:
     with col1:
         st.plotly_chart(
             charts.gauge_chart(result.overall_score, result.band_color),
-            use_container_width=True,
+            width="stretch",
         )
 
     with col2:
@@ -201,16 +201,16 @@ def _render_overview(result, profile_stats: dict) -> None:
         st.dataframe(
             charts.score_breakdown_table(result),
             hide_index=True,
-            use_container_width=True,
+            width="stretch",
         )
 
     with col_right:
         st.subheader("Radar View")
-        st.plotly_chart(charts.radar_chart(result), use_container_width=True)
+        st.plotly_chart(charts.radar_chart(result), width="stretch")
 
     # Pillar bar chart
     st.subheader("Score by Pillar")
-    st.plotly_chart(charts.pillar_bar_chart(result), use_container_width=True)
+    st.plotly_chart(charts.pillar_bar_chart(result), width="stretch")
 
 
 def _render_pillars(result) -> None:
@@ -249,14 +249,14 @@ def _render_profile(df: pd.DataFrame, profile_stats: dict) -> None:
     st.markdown("#### Missing Values by Column")
     st.plotly_chart(
         charts.missing_value_heatmap(profile_stats, top_n=25),
-        use_container_width=True,
+        width="stretch",
     )
 
     # Correlation heatmap
     corr_fig = charts.correlation_heatmap(profile_stats)
     if corr_fig:
         st.markdown("#### Feature Correlation Matrix (Numeric Columns)")
-        st.plotly_chart(corr_fig, use_container_width=True)
+        st.plotly_chart(corr_fig, width="stretch")
 
     # Column stats table
     st.markdown("#### Column Statistics")
@@ -275,7 +275,7 @@ def _render_profile(df: pd.DataFrame, profile_stats: dict) -> None:
                 row["Std"] = info.get("std")
                 row["Skewness"] = info.get("skewness")
             rows.append(row)
-        st.dataframe(pd.DataFrame(rows), hide_index=True, use_container_width=True)
+        st.dataframe(pd.DataFrame(rows), hide_index=True, width="stretch")
 
     # Embedded ydata-profiling report
     html_report = profile_stats.get("html_report")
