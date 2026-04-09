@@ -77,8 +77,8 @@ def _run_rule(df: pd.DataFrame, rule: dict, n_rows: int) -> dict[str, Any]:
     if rule.get("operator") == ">=" and left_col and right_col:
         if left_col not in df.columns or right_col not in df.columns:
             return {"passed": True, "skipped": True, "reason": "Columns not in dataset"}
-        left = pd.to_datetime(df[left_col], errors="coerce", infer_datetime_format=True)
-        right = pd.to_datetime(df[right_col], errors="coerce", infer_datetime_format=True)
+        left = pd.to_datetime(df[left_col], errors="coerce")
+        right = pd.to_datetime(df[right_col], errors="coerce")
         both_valid = left.notna() & right.notna()
         violations = int((left[both_valid] < right[both_valid]).sum())
         violation_pct = round(violations / n_rows * 100, 2)

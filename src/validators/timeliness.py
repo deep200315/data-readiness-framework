@@ -57,7 +57,7 @@ def check(df: pd.DataFrame, config: dict) -> dict[str, Any]:
     details: dict[str, Any] = {"columns": {}}
 
     for col in datetime_cols:
-        parsed = pd.to_datetime(df[col], errors="coerce", infer_datetime_format=True)
+        parsed = pd.to_datetime(df[col], errors="coerce")
         valid = parsed.dropna().sort_values()
         parse_fail_count = int(parsed.isnull().sum()) - int(df[col].isnull().sum())
 
@@ -135,7 +135,7 @@ def _auto_detect_datetime_cols(df: pd.DataFrame) -> list[str]:
             continue
         if any(kw in col.lower() for kw in ("date", "time", "timestamp")):
             sample = df[col].dropna().head(20)
-            parsed = pd.to_datetime(sample, errors="coerce", infer_datetime_format=True)
+            parsed = pd.to_datetime(sample, errors="coerce")
             if parsed.notna().mean() >= 0.8:
                 detected.append(col)
     return detected

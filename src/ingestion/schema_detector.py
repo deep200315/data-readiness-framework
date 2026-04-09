@@ -158,7 +158,7 @@ def _try_parse_datetime(series: pd.Series, sample_size: int = 50) -> bool:
     if len(sample) == 0:
         return False
     try:
-        parsed = pd.to_datetime(sample, infer_datetime_format=True, errors="coerce")
+        parsed = pd.to_datetime(sample, errors="coerce")
         success_rate = parsed.notna().mean()
         return success_rate >= 0.8
     except Exception:
