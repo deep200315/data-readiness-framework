@@ -1,0 +1,18 @@
+{
+  "default_branch": "main",
+  "branches": [
+    "main",
+    "origin",
+    "react-flow"
+  ],
+  "parent": {
+    "main": null,
+    "origin": "main",
+    "react-flow": "main"
+  },
+  "order": [
+    "main",
+    "origin",
+    "react-flow"
+  ]
+}
