@@ -33,7 +33,6 @@ test_report.pdf
 .streamlit/secrets.toml
 
 # IDE
-.vscode/
 .idea/
 *.swp
 *.swo
@@ -55,3 +54,7 @@ logs/
 dist/
 build/
 *.egg-info/
+branch_structure.json
+temp_auto_push.bat
+temp_interactive_push.bat
+.gitignore
