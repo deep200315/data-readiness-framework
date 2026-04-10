@@ -14,13 +14,13 @@ venv/
 env/
 ENV/
 
-# Data files — DataCo CSV is too large for git (use Git LFS or download from Kaggle)
-data/*.csv
+# Data files — DataCo CSV is too large for git (download from Kaggle)
+data/DataCoSupplyChainDataset.csv
 data/*.xlsx
 data/*.parquet
 data/*.json
+# Synthetic test datasets are tracked
 # Keep the generator script
-!data/generate_test_data.py
 
 # Generated reports
 *.pdf
