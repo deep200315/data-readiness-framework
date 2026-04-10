@@ -26,6 +26,7 @@ export default function PillarGroupNode() {
       >
         Validation &amp; Scoring Layer
       </span>
+
     </div>
   );
 }

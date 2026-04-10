@@ -1,8 +1,8 @@
 import { Handle, Position } from '@xyflow/react';
 import { scoreColor } from '../utils.js';
 
-export default function PillarNode({ data, selected }) {
-  const color = scoreColor(data.score);
+export default function PillarNode({ data }) {
+  const color      = scoreColor(data.score);
   const isSelected = data.isSelected;
 
   return (
@@ -18,9 +18,7 @@ export default function PillarNode({ data, selected }) {
       {data.score != null ? (
         <>
           <div className="node-score" style={{ color }}>{data.score.toFixed(1)}</div>
-          <div className="node-checks">
-            {data.passed}/{data.total} checks
-          </div>
+          <div className="node-checks">{data.passed}/{data.total} checks</div>
         </>
       ) : (
         <div className="node-sub" style={{ marginTop: 6 }}>—</div>

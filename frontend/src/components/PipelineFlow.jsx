@@ -11,6 +11,7 @@ import PillarNode      from '../nodes/PillarNode.jsx';
 import ScoringNode     from '../nodes/ScoringNode.jsx';
 import ReportNode      from '../nodes/ReportNode.jsx';
 import PillarGroupNode from '../nodes/PillarGroupNode.jsx';
+import AnnotationNode  from '../nodes/AnnotationNode.jsx';
 import { PILLAR_META, PILLAR_ORDER, scoreColor } from '../utils.js';
 import { pdfUrl } from '../api.js';
 
@@ -21,6 +22,7 @@ const nodeTypes = {
   scoringNode:     ScoringNode,
   reportNode:      ReportNode,
   pillarGroupNode: PillarGroupNode,
+  annotationNode:  AnnotationNode,
 };
 
 // Layout
@@ -82,6 +84,18 @@ function buildNodes(results) {
         },
       };
     }),
+    // Annotation — positioned to the right of the pillar group
+    {
+      id: 'annotation', type: 'annotationNode',
+      position: { x: GROUP_X + GROUP_W + 30, y: GROUP_Y + 60 },
+      data: {
+        text: 'Click on any pillar to view its score, issues & recommendations',
+        arrow: '↙',
+      },
+      draggable: true,
+      selectable: false,
+    },
+
     {
       id: 'scoring', type: 'scoringNode',
       position: { x: CX, y: 740 },

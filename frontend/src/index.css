@@ -317,6 +317,92 @@ html, body, #root {
 .react-flow__edge-path { stroke-linecap: round; }
 .react-flow__attribution { display: none !important; }
 
+/* ── Pillar NodeToolbar card ──────────────────────────────── */
+.pillar-toolbar {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  width: 280px;
+  overflow: hidden;
+  font-size: 13px;
+}
+
+.pt-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--surface2);
+}
+.pt-icon  { font-size: 22px; flex-shrink: 0; }
+.pt-title { font-weight: 700; font-size: 14px; color: var(--text); }
+.pt-weight { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.pt-score {
+  margin-left: auto;
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.pt-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px 4px;
+}
+.pt-bar-bg {
+  flex: 1;
+  height: 7px;
+  background: var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.pt-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.5s ease;
+}
+.pt-band   { font-size: 11px; font-weight: 700; width: 64px; text-align: right; flex-shrink: 0; }
+.pt-checks { font-size: 11px; color: var(--text-muted); padding: 2px 14px 10px; }
+
+.pt-section { padding: 8px 14px; border-top: 1px solid var(--border); }
+.pt-section-title {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.pt-issue {
+  font-size: 12px;
+  color: #991b1b;
+  background: #fef2f2;
+  border-left: 3px solid #dc2626;
+  border-radius: 0 4px 4px 0;
+  padding: 5px 8px;
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+.pt-rec {
+  font-size: 12px;
+  color: #1e40af;
+  background: #eff6ff;
+  border-left: 3px solid #4f8ef7;
+  border-radius: 0 4px 4px 0;
+  padding: 5px 8px;
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+.pt-clean {
+  font-size: 12px;
+  color: var(--green);
+  padding: 10px 14px;
+  border-top: 1px solid var(--border);
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
